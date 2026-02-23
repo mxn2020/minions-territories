@@ -1,126 +1,69 @@
 ---
 name: minions-territories
-description: Agent skills for working with Minions Territories MinionTypes. Provides CRUD operations, CLI usage, and best practices for AI agents managing minions-territories data.
+description: Country, state, region, city definitions, focus queue, and saturation tracking
 ---
 
-# Minions Territories Agent Skills
+# minions-territories — Agent Skills
 
-Skills for agents operating on the `minions-territories` toolbox.
+## What is a Territory in the Minions Context?
 
-## Prerequisites
+```
+a geographic area for prospecting         → Territory
+saturation metrics for a territory        → TerritorySaturation
+the ordered queue of territories          → FocusQueue
+```
 
-Install the SDK and CLI:
+Geo hierarchy: Country → State → Region → City
+
+## MinionTypes
+```ts
+// territory — name, level, parent, country/state/region/city, estimated businesses
+// territory-saturation — total prospects, contacted, reply/conversion rates
+// focus-queue — ordered list of territory IDs with current index
+```
+
+## Agent SKILLS
+```markdown
+# TerritoryAgent Skills
+## Skill: Manage Focus Queue — rotate through territories by saturation
+## Skill: Track Saturation — update metrics after each outreach cycle
+## Hard Rules — move to next territory when saturation exceeds threshold
+```
+
+
+---
+
+## CLI Reference
+
+Install globally:
 
 ```bash
-# TypeScript
-pnpm add @minions-territories/sdk
-
-# Python
-pip install minions-territories
-
-# CLI
 pnpm add -g @minions-territories/cli
 ```
 
----
+Set `MINIONS_STORE` env var to control where data is stored (default: `.minions/`).
 
-## Using the CLI
-
-The `territories` CLI provides basic project info and utilities:
+### Discover Types
 
 ```bash
-# Show project info (SDK name, CLI name, Python package)
-territories info
+territories types list
+territories types show <type-slug>
 ```
 
-Use the CLI as the primary interface for scripted operations. For programmatic access within agent code, use the SDK directly.
+### CRUD
 
----
-
-## Using the SDK
-
-### TypeScript
-
-```ts
-import { customTypes } from '@minions-territories/sdk/schemas';
-
-// List all available MinionTypes in this toolbox
-for (const type of customTypes) {
-  console.log(`${type.icon} ${type.name} (${type.slug})`);
-  console.log(`  ${type.description}`);
-  console.log(`  Fields: ${type.schema.map(f => f.name).join(', ')}`);
-}
-
-// Access a specific type
-const myType = customTypes.find(t => t.slug === 'YOUR_TYPE_SLUG');
+```bash
+territories create <type> -t "Title" -s "status"
+territories list <type>
+territories show <id>
+territories update <id> --data '{ "status": "active" }'
+territories delete <id>
+territories search "query"
 ```
 
-### Python
+### Stats & Validation
 
-```python
-from minions_territories.schemas import custom_types
-
-# List all available MinionTypes
-for t in custom_types:
-    print(f"{t.icon} {t.name} ({t.slug})")
-    print(f"  {t.description}")
+```bash
+territories stats
+territories validate ./my-minion.json
 ```
-
----
-
-## Skill: Create Minion
-
-When creating a new Minion of any type in this toolbox:
-
-1. Look up the MinionType from `customTypes` by slug
-2. Validate all required fields are present according to the schema
-3. Set `string` fields to their values, `number` fields to numeric values
-4. Set `select` fields to one of their valid options
-5. Set `boolean` fields to `true` or `false`
-6. Always include a timestamp for any `createdAt` or similar fields (ISO 8601 format)
-
----
-
-## Skill: Read / Query Minions
-
-When reading or searching for Minions:
-
-1. Query by MinionType slug to filter by type
-2. Use field values for secondary filtering
-3. For references (fields ending in `Id`), resolve the linked Minion for full context
-4. Return results in a structured format the calling agent can parse
-
----
-
-## Skill: Update Minion
-
-When updating an existing Minion:
-
-1. Load the current Minion by ID
-2. Validate the update against the MinionType schema
-3. Only modify the fields that need changing — preserve existing values
-4. If the type has a `status` field, follow valid status transitions
-5. If the type has an `updatedAt` field, set it to the current timestamp
-6. Log significant field changes for audit if the context requires it
-
----
-
-## Skill: Delete / Archive Minion
-
-When removing a Minion:
-
-1. Prefer soft-delete: set `status` to `"cancelled"` or `"archived"` if available
-2. Never hard-delete Minions that other Minions reference via ID fields
-3. Check for dependent Minions before any destructive operation
-4. If hard-delete is required, ensure all references are cleaned up first
-
----
-
-## Hard Rules
-
-- Every Minion MUST conform to its MinionType schema
-- All `select` fields must use valid option values
-- All ID reference fields must point to existing Minions
-- Timestamps must be in ISO 8601 format
-- Never create orphaned Minions — always set reference fields when applicable
-- This agent only writes to `minions-territories` — it reads from other toolboxes but never writes to them
