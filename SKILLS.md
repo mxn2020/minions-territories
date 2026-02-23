@@ -1,6 +1,12 @@
 ---
 name: minions-territories
-description: Country, state, region, city definitions, focus queue, and saturation tracking
+id: OC-0165
+version: 1.0.0
+description: "Country, state, region, city definitions, focus queue, and saturation tracking"
+category: productivity
+subcategory: sales
+tags: ["minion", "productivity", "sales"]
+comments:
 ---
 
 # minions-territories — Agent Skills
