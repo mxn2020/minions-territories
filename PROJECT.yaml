@@ -1,0 +1,15 @@
+name: minions-territories-workspace
+project_scope: main
+project_type: monorepo
+description: "Country, state, region, city definitions, focus queue, and saturation tracking"
+tier: idea
+lane: minions
+priority: medium
+oss: true
+stack: [typescript]
+repo: "https://github.com/mxn2020/minions-territories"
+deploy_url: null
+last_active: 2026-02-23
+tags: [minion, toolbox, ai-agent, automation, minions, territories]
+notes: null
+id: 5b8cf26c-fde3-4b1f-9432-a7ec4234733d

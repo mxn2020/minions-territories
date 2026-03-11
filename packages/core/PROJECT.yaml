@@ -1,0 +1,8 @@
+name: "@minions-territories/sdk"
+project_scope: child
+child_type: sdk
+parent_project: minions-territories-workspace
+description: "Country, state, region, city definitions, focus queue, and saturation tracking"
+priority: high
+deploy_url: null
+tags: null
