@@ -6,3 +6,4 @@ description: "CLI for minions-territories — Country, state, region, city defin
 priority: high
 deploy_url: null
 tags: null
+category: minion-toolbox
