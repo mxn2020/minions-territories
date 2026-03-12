@@ -1,6 +1,6 @@
 {
   "name": "@minions-territories/cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "CLI for minions-territories — Country, state, region, city definitions, focus queue, and saturation tracking",
   "license": "MIT",
   "repository": {

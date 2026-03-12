@@ -1,6 +1,6 @@
 {
   "name": "@minions-territories/sdk",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Country, state, region, city definitions, focus queue, and saturation tracking",
   "type": "module",
   "main": "./dist/index.js",
